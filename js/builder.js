@@ -10,11 +10,25 @@ const Builder = {
     Utils.initTheme();
     const params = new URLSearchParams(window.location.search);
     let id = params.get('id') || Storage.getCurrentId();
-    if (id) this.resume = Storage.getResume(id);
-    if (!this.resume) {
-      this.resume = Storage.createEmptyResume();
-      Storage.saveResume(this.resume);
+
+    if (id) {
+      this.resume = Storage.getResume(id);
     }
+    if (!this.resume) {
+      // First-time / empty resume → load sample so users immediately see how it works
+      this.resume = Storage.getSampleResume();
+      Storage.saveResume(this.resume);
+      setTimeout(() => Utils.toast('Sample resume loaded — edit anything to make it yours!', 'info', 4000), 600);
+    } else if (!this.resume.personal?.fullName && !this.resume.experience?.length) {
+      // Empty existing resume → also load sample for better first experience
+      const sample = Storage.getSampleResume();
+      sample.id = this.resume.id;
+      sample.title = this.resume.title || 'Software Developer Resume';
+      this.resume = sample;
+      Storage.saveResume(this.resume);
+      setTimeout(() => Utils.toast('Sample resume loaded — edit anything to make it yours!', 'info', 4000), 600);
+    }
+
     this.bindUI();
     this.populateForm();
     this.renderPreview();
@@ -22,7 +36,10 @@ const Builder = {
     Utils.initAccordions();
     this.initMobileNav();
     this.initKeyboard();
-    document.querySelectorAll('.editor-section').forEach((s, i) => { if (i < 2) s.classList.add('open'); });
+
+    document.querySelectorAll('.editor-section').forEach((s, i) => {
+      if (i < 2) s.classList.add('open');
+    });
   },
 
   bindUI() {
