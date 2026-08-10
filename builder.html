@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor — ResumeForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/builder.css" />
+  <link rel="stylesheet" href="css/print.css" />
+</head>
+<body class="builder-page">
+  <header class="builder-header no-print">
+    <div class="builder-header-inner">
+      <div class="builder-header-left">
+        <a href="index.html" class="logo" style="font-size:1rem;">
+          <span class="logo-icon" style="width:28px;height:28px;font-size:0.8rem;">RF</span>
+        </a>
+        <input type="text" id="resume-title" class="resume-title-input" value="Untitled Resume" aria-label="Resume title" />
+        <span id="auto-save" class="auto-save-indicator saved">Saved</span>
+      </div>
+      <div class="builder-header-right">
+        <button id="btn-save" class="btn btn-secondary btn-sm" title="Save (Ctrl+S)"><span>Save</span></button>
+        <button id="btn-download-pdf" class="btn btn-primary btn-sm">Download PDF</button>
+        <button id="btn-print" class="btn btn-secondary btn-sm" title="Print (Ctrl+P)"><span>Print</span></button>
+        <button id="change-template" class="btn btn-ghost btn-sm"><span>Templates</span></button>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="builder-main">
+    <aside class="editor-panel no-print">
+      <div class="score-widget">
+        <div class="score-header">
+          <strong>Resume Score</strong>
+          <span id="score-value" class="score-value">0/100</span>
+        </div>
+        <ul id="score-list" class="score-checklist"></ul>
+      </div>
+
+      <div class="editor-section open" id="section-personal">
+        <div class="editor-section-header">
+          <h3>👤 Personal Information</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div class="photo-upload-area" style="margin-bottom:1rem;">
+            <div id="photo-placeholder" class="photo-placeholder">📷</div>
+            <img id="photo-preview" class="photo-preview hidden" alt="Profile photo" />
+            <div>
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                Upload Photo
+                <input type="file" id="photo-input" accept="image/*" class="hidden" />
+              </label>
+              <button id="remove-photo" class="btn btn-ghost btn-sm hidden" style="margin-top:0.35rem;">Remove</button>
+              <div style="margin-top:0.5rem;display:flex;gap:0.35rem;">
+                <button type="button" class="option-btn active" data-photo-shape="circle">Circle</button>
+                <button type="button" class="option-btn" data-photo-shape="square">Square</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="full-name">Full Name</label><input id="full-name" placeholder="Menelik Admasu" /></div>
+            <div class="form-group"><label for="job-title">Professional Title</label><input id="job-title" placeholder="Full Stack Developer" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="email">📧 Email</label><input id="email" type="email" placeholder="you@example.com" /></div>
+            <div class="form-group"><label for="phone">📱 Phone</label><input id="phone" placeholder="+251 911 123 456" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="location">📍 Location</label><input id="location" placeholder="Bahir Dar, Ethiopia" /></div>
+            <div class="form-group"><label for="website">🌐 Website</label><input id="website" placeholder="https://yoursite.com" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="linkedin">🔗 LinkedIn</label><input id="linkedin" placeholder="linkedin.com/in/you" /></div>
+            <div class="form-group"><label for="github">🐙 GitHub</label><input id="github" placeholder="github.com/you" /></div>
+          </div>
+          <div class="form-group">
+            <label for="summary">Professional Summary</label>
+            <textarea id="summary" rows="4" placeholder="A short summary of your professional background..."></textarea>
+            <div class="char-count"><span id="summary-count">0</span> characters</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-experience">
+        <div class="editor-section-header">
+          <h3>💼 Work Experience</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div id="experience-list"></div>
+          <button type="button" id="add-experience" class="btn btn-add">+ Add Experience</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-education">
+        <div class="editor-section-header">
+          <h3>🎓 Education</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div id="education-list"></div>
+          <button type="button" id="add-education" class="btn btn-add">+ Add Education</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-skills">
+        <div class="editor-section-header">
+          <h3>🛠 Skills</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div class="skills-display-toggle">
+            <button type="button" data-skills-display="bars" class="active">Progress Bars</button>
+            <button type="button" data-skills-display="badges">Badges</button>
+          </div>
+          <div id="skills-list"></div>
+          <button type="button" id="add-skill" class="btn btn-add">+ Add Skill</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-projects">
+        <div class="editor-section-header">
+          <h3>🚀 Projects</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div id="projects-list"></div>
+          <button type="button" id="add-project" class="btn btn-add">+ Add Project</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-certifications">
+        <div class="editor-section-header">
+          <h3>🏆 Certifications</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div id="certifications-list"></div>
+          <button type="button" id="add-certification" class="btn btn-add">+ Add Certification</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-languages">
+        <div class="editor-section-header">
+          <h3>🌍 Languages</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div id="languages-list"></div>
+          <button type="button" id="add-language" class="btn btn-add">+ Add Language</button>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-customization">
+        <div class="editor-section-header">
+          <h3>🎨 Customization</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div class="form-group">
+            <label>Accent Color</label>
+            <div class="color-swatches">
+              <button type="button" class="color-swatch active" data-accent="#2563eb" style="background:#2563eb;" title="Blue"></button>
+              <button type="button" class="color-swatch" data-accent="#0f172a" style="background:#0f172a;" title="Black"></button>
+              <button type="button" class="color-swatch" data-accent="#7c3aed" style="background:#7c3aed;" title="Purple"></button>
+              <button type="button" class="color-swatch" data-accent="#059669" style="background:#059669;" title="Green"></button>
+              <button type="button" class="color-swatch" data-accent="#dc2626" style="background:#dc2626;" title="Red"></button>
+              <button type="button" class="color-swatch" data-accent="#ea580c" style="background:#ea580c;" title="Orange"></button>
+              <button type="button" class="color-swatch" data-accent="#0891b2" style="background:#0891b2;" title="Cyan"></button>
+              <button type="button" class="color-swatch" data-accent="#be185d" style="background:#be185d;" title="Pink"></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Font</label>
+            <div class="font-options">
+              <button type="button" class="option-btn active" data-font="Inter">Inter</button>
+              <button type="button" class="option-btn" data-font="Merriweather">Merriweather</button>
+              <button type="button" class="option-btn" data-font="Georgia">Georgia</button>
+              <button type="button" class="option-btn" data-font="Arial">Arial</button>
+              <button type="button" class="option-btn" data-font="JetBrains Mono">Mono</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Font Size</label>
+            <div class="size-options">
+              <button type="button" class="option-btn" data-fontsize="small">Small</button>
+              <button type="button" class="option-btn active" data-fontsize="medium">Medium</button>
+              <button type="button" class="option-btn" data-fontsize="large">Large</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Spacing</label>
+            <div class="spacing-options">
+              <button type="button" class="option-btn" data-spacing="compact">Compact</button>
+              <button type="button" class="option-btn active" data-spacing="normal">Normal</button>
+              <button type="button" class="option-btn" data-spacing="comfortable">Comfortable</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-extra">
+        <div class="editor-section-header">
+          <h3>➕ Additional Sections</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">Enable a section, then add your entries below.</p>
+
+          <label class="checkbox-label" style="margin-bottom:0.5rem;"><input type="checkbox" data-toggle-section="awards" /> Awards</label>
+          <div id="extra-awards" class="extra-section-panel hidden">
+            <div id="awards-list"></div>
+            <button type="button" id="add-award" class="btn btn-add">+ Add Award</button>
+          </div>
+
+          <label class="checkbox-label" style="margin-bottom:0.5rem;margin-top:0.75rem;"><input type="checkbox" data-toggle-section="volunteer" /> Volunteer Experience</label>
+          <div id="extra-volunteer" class="extra-section-panel hidden">
+            <div id="volunteer-list"></div>
+            <button type="button" id="add-volunteer" class="btn btn-add">+ Add Volunteer Role</button>
+          </div>
+
+          <label class="checkbox-label" style="margin-bottom:0.5rem;margin-top:0.75rem;"><input type="checkbox" data-toggle-section="publications" /> Publications</label>
+          <div id="extra-publications" class="extra-section-panel hidden">
+            <div id="publications-list"></div>
+            <button type="button" id="add-publication" class="btn btn-add">+ Add Publication</button>
+          </div>
+
+          <label class="checkbox-label" style="margin-bottom:0.5rem;margin-top:0.75rem;"><input type="checkbox" data-toggle-section="interests" /> Interests</label>
+          <div id="extra-interests" class="extra-section-panel hidden">
+            <div id="interests-list"></div>
+            <button type="button" id="add-interest" class="btn btn-add">+ Add Interest</button>
+          </div>
+
+          <label class="checkbox-label" style="margin-bottom:0.5rem;margin-top:0.75rem;"><input type="checkbox" data-toggle-section="references" /> References</label>
+          <div id="extra-references" class="extra-section-panel hidden">
+            <div id="references-list"></div>
+            <button type="button" id="add-reference" class="btn btn-add">+ Add Reference</button>
+          </div>
+
+          <label class="checkbox-label" style="margin-top:0.75rem;"><input type="checkbox" data-toggle-section="achievements" /> Achievements</label>
+          <div id="extra-achievements" class="extra-section-panel hidden">
+            <div id="achievements-list"></div>
+            <button type="button" id="add-achievement" class="btn btn-add">+ Add Achievement</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-section" id="section-tools">
+        <div class="editor-section-header">
+          <h3>⚙ Tools</h3>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="editor-section-body">
+          <div class="flex gap-2" style="flex-wrap:wrap;">
+            <button id="btn-export-json" class="btn btn-secondary btn-sm">Export JSON</button>
+            <button id="btn-import-json" class="btn btn-secondary btn-sm">Import JSON</button>
+            <input type="file" id="import-file" accept=".json" class="hidden" />
+            <button id="btn-load-sample" class="btn btn-secondary btn-sm">Load Sample</button>
+            <button id="btn-clear" class="btn btn-danger btn-sm">Clear Resume</button>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1rem;">
+            Your resume stays on your device. Data is stored locally in your browser and is not uploaded to a server.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <section class="preview-panel">
+      <div class="preview-toolbar no-print">
+        <button class="btn btn-primary btn-sm" onclick="PDF.download()">Download PDF</button>
+        <button class="btn btn-secondary btn-sm" onclick="PDF.print()">Print</button>
+      </div>
+      <div id="resume-paper" class="resume-paper" aria-label="Resume preview"></div>
+    </section>
+  </div>
+
+  <nav class="mobile-nav no-print" aria-label="Mobile navigation">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn" data-view="edit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit
+      </button>
+      <button class="mobile-nav-btn" data-view="preview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Preview
+      </button>
+      <button class="mobile-nav-btn" data-view="templates">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Templates
+      </button>
+      <button class="mobile-nav-btn" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+  </nav>
+
+  <div class="toast-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/builder.js"></script>
+</body>
+</html>
