@@ -45,13 +45,13 @@ const Preview = {
 
   contactLine(p) {
     const parts = [];
-    if (p.email) parts.push(p.email);
-    if (p.phone) parts.push(p.phone);
-    if (p.location) parts.push(p.location);
-    if (p.website) parts.push(p.website);
-    if (p.linkedin) parts.push(p.linkedin);
-    if (p.github) parts.push(p.github);
-    return parts.join('  •  ');
+    if (p.email) parts.push(`📧 ${Utils.escapeHtml(p.email)}`);
+    if (p.phone) parts.push(`📱 ${Utils.escapeHtml(p.phone)}`);
+    if (p.location) parts.push(`📍 ${Utils.escapeHtml(p.location)}`);
+    if (p.website) parts.push(`🌐 ${Utils.escapeHtml(p.website)}`);
+    if (p.linkedin) parts.push(`🔗 ${Utils.escapeHtml(p.linkedin)}`);
+    if (p.github) parts.push(`🐙 ${Utils.escapeHtml(p.github)}`);
+    return parts.join('  ·  ');
   },
 
   sectionTitle(title, accent) {
@@ -171,9 +171,11 @@ const Preview = {
         <h1 style="margin:12px 0 4px;font-size:1.4em;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
         <div style="opacity:0.9;font-size:0.95em;">${Utils.escapeHtml(p.title)}</div>
         <div style="margin-top:16px;font-size:0.8em;line-height:1.7;">
-          ${p.email ? `<div>${Utils.escapeHtml(p.email)}</div>` : ''}
-          ${p.phone ? `<div>${Utils.escapeHtml(p.phone)}</div>` : ''}
-          ${p.location ? `<div>${Utils.escapeHtml(p.location)}</div>` : ''}
+          ${p.email ? `<div>📧 ${Utils.escapeHtml(p.email)}</div>` : ''}
+          ${p.phone ? `<div>📱 ${Utils.escapeHtml(p.phone)}</div>` : ''}
+          ${p.location ? `<div>📍 ${Utils.escapeHtml(p.location)}</div>` : ''}
+          ${p.linkedin ? `<div>🔗 ${Utils.escapeHtml(p.linkedin)}</div>` : ''}
+          ${p.github ? `<div>🐙 ${Utils.escapeHtml(p.github)}</div>` : ''}
         </div>
         ${r.skills.length ? `<div style="margin-top:20px;"><strong style="font-size:0.85em;">SKILLS</strong><div style="margin-top:8px;">${this.skillsHtml(r.skills, 'badges', '#fff')}</div></div>` : ''}
       </div>
@@ -203,9 +205,9 @@ const Preview = {
           <div style="color:${accent};font-size:1.1em;margin-top:2px;">${Utils.escapeHtml(p.title)}</div>
         </div>
         <div style="text-align:right;font-size:0.8em;color:#64748b;line-height:1.6;">
-          ${p.email ? `<div>${Utils.escapeHtml(p.email)}</div>` : ''}
-          ${p.phone ? `<div>${Utils.escapeHtml(p.phone)}</div>` : ''}
-          ${p.location ? `<div>${Utils.escapeHtml(p.location)}</div>` : ''}
+          ${p.email ? `<div>📧 ${Utils.escapeHtml(p.email)}</div>` : ''}
+          ${p.phone ? `<div>📱 ${Utils.escapeHtml(p.phone)}</div>` : ''}
+          ${p.location ? `<div>📍 ${Utils.escapeHtml(p.location)}</div>` : ''}
         </div>
       </div>
       ${this._simpleSections(r, accent)}
@@ -243,9 +245,11 @@ const Preview = {
         <h1 style="margin:12px 0 2px;font-size:1.3em;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
         <div style="color:${accent};font-size:0.95em;">${Utils.escapeHtml(p.title)}</div>
         <div style="font-size:0.8em;color:#64748b;margin:10px 0 16px;line-height:1.7;">
-          ${p.email ? `<div>${Utils.escapeHtml(p.email)}</div>` : ''}
-          ${p.phone ? `<div>${Utils.escapeHtml(p.phone)}</div>` : ''}
-          ${p.location ? `<div>${Utils.escapeHtml(p.location)}</div>` : ''}
+          ${p.email ? `<div>📧 ${Utils.escapeHtml(p.email)}</div>` : ''}
+          ${p.phone ? `<div>📱 ${Utils.escapeHtml(p.phone)}</div>` : ''}
+          ${p.location ? `<div>📍 ${Utils.escapeHtml(p.location)}</div>` : ''}
+          ${p.linkedin ? `<div>🔗 ${Utils.escapeHtml(p.linkedin)}</div>` : ''}
+          ${p.github ? `<div>🐙 ${Utils.escapeHtml(p.github)}</div>` : ''}
         </div>
         ${r.skills.length ? `<div style="margin-bottom:14px;"><strong style="color:${accent};font-size:0.85em;">SKILLS</strong><div style="margin-top:6px;">${this.skillsHtml(r.skills, 'badges', accent)}</div></div>` : ''}
       </div>
