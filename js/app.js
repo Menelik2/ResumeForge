@@ -14,30 +14,46 @@ const App = {
     const splash = document.getElementById('splash');
     if (!splash) return;
 
-    const seen = sessionStorage.getItem('yeni-pro-cv-splash');
-    if (seen) {
-      splash.classList.add('is-hidden');
-      splash.setAttribute('aria-hidden', 'true');
-      return;
+    // Always show on every page open
+    splash.classList.remove('is-hidden', 'splash-out');
+    splash.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('splash-active');
+
+    const content = splash.querySelector('.splash-content');
+    if (content) {
+      content.style.animation = 'none';
+      void content.offsetWidth;
+      content.style.animation = '';
+    }
+    const bar = splash.querySelector('.splash-progress-bar');
+    if (bar) {
+      bar.style.animation = 'none';
+      void bar.offsetWidth;
+      bar.style.animation = '';
     }
 
-    document.body.classList.add('splash-active');
+    let dismissed = false;
     const dismiss = () => {
-      splash.classList.add('is-hidden');
-      splash.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('splash-active');
-      sessionStorage.setItem('yeni-pro-cv-splash', '1');
+      if (dismissed) return;
+      dismissed = true;
+      splash.classList.add('splash-out');
+      setTimeout(() => {
+        splash.classList.add('is-hidden');
+        splash.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('splash-active');
+      }, 650);
+      window.removeEventListener('keydown', onKey);
     };
 
     document.getElementById('splash-enter')?.addEventListener('click', dismiss);
+
+    // Auto-enter after 5 seconds
     setTimeout(() => {
-      if (!splash.classList.contains('is-hidden')) dismiss();
-    }, 3500);
+      if (!dismissed) dismiss();
+    }, 5000);
+
     const onKey = (e) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
-        dismiss();
-        window.removeEventListener('keydown', onKey);
-      }
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') dismiss();
     };
     window.addEventListener('keydown', onKey);
   },
