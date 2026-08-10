@@ -1,60 +1,8 @@
 /* ============================================
-   ResumeForge — Print & PDF Styles
+   Yeni Pro CV — Print & PDF Styles
    ============================================ */
 
 @media print {
-  /* Hide everything except the resume */
-  body * {
-    visibility: hidden;
-  }
-
-  .resume-paper,
-  .resume-paper * {
-    visibility: visible;
-  }
-
-  .resume-paper {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 210mm !important;
-    min-height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-    transform: none !important;
-    background: #fff !important;
-    color: #000 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Hide UI elements */
-  .builder-header,
-  .editor-panel,
-  .preview-toolbar,
-  .mobile-nav,
-  .toast-container,
-  .modal-overlay,
-  .site-header,
-  .site-footer,
-  .no-print {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  .preview-panel {
-    padding: 0 !important;
-    background: transparent !important;
-    overflow: visible !important;
-    display: block !important;
-  }
-
-  .builder-main {
-    display: block !important;
-  }
-
-  /* Page setup */
   @page {
     size: A4;
     margin: 12mm;
@@ -63,45 +11,79 @@
   html, body {
     width: 210mm;
     height: auto;
-    margin: 0;
-    padding: 0;
-    background: #fff;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
   }
 
-  /* Ensure multi-page works */
+  .builder-header,
+  .editor-panel,
+  .preview-toolbar,
+  .mobile-nav,
+  .toast-container,
+  .modal-overlay,
+  .site-header,
+  .site-footer,
+  .splash,
+  .no-print {
+    display: none !important;
+  }
+
+  .builder-page,
+  .builder-main,
+  .preview-panel {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
   .resume-paper {
-    page-break-after: auto;
-    page-break-inside: auto;
+    position: static !important;
+    width: 210mm !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  .resume-section {
-    page-break-inside: avoid;
-  }
-
-  h1, h2, h3 {
-    page-break-after: avoid;
-  }
+  .resume-section { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+  a { text-decoration: none !important; color: inherit !important; }
 }
 
-/* PDF export helper class */
 .pdf-mode .builder-header,
 .pdf-mode .editor-panel,
 .pdf-mode .preview-toolbar,
 .pdf-mode .mobile-nav,
 .pdf-mode .toast-container,
+.pdf-mode .splash,
 .pdf-mode .no-print {
   display: none !important;
 }
 
+.pdf-mode .builder-main,
 .pdf-mode .preview-panel {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
   padding: 0 !important;
   background: #fff !important;
-  overflow: visible !important;
+  border: none !important;
 }
 
 .pdf-mode .resume-paper {
   box-shadow: none !important;
   transform: none !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
   width: 210mm !important;
+  max-width: 100% !important;
 }
