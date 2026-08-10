@@ -3,21 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Yeni CV — Create professional resumes in minutes. Free, private, frontend-only resume builder." />
-  <title>Yeni CV — Premium Resume Builder</title>
+  <meta name="description" content="Yeni Pro CV — Create professional resumes in minutes. Free, private, frontend-only resume builder." />
+  <title>Yeni Pro CV — Premium Resume Builder</title>
+  <meta name="theme-color" content="#0a0a0f" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div id="splash" class="splash" role="dialog" aria-label="Welcome to Yeni Pro CV">
+    <div class="splash-bg"></div>
+    <div class="splash-content">
+      <div class="splash-logo">
+        <svg viewBox="0 0 40 40" width="72" height="72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="splash-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#2563eb"/>
+              <stop offset="1" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <rect width="40" height="40" rx="12" fill="url(#splash-grad)"/>
+          <path d="M12 10h12l4 4v16a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="white" fill-opacity="0.2"/>
+          <path d="M24 10v4h4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          <text x="20" y="26" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-weight="800" font-size="13">YC</text>
+        </svg>
+      </div>
+      <h1 class="splash-title">Yeni Pro CV</h1>
+      <p class="splash-tagline">Build a professional resume in minutes</p>
+      <button type="button" id="splash-enter" class="splash-btn">Get Started</button>
+      <p class="splash-hint">Your data stays on your device · No account needed</p>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
         <span class="logo-icon" aria-hidden="true">
           <svg viewBox="0 0 32 32" width="36" height="36"><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#7c3aed"/></linearGradient><rect width="32" height="32" rx="8" fill="url(#g)"/><path fill="#fff" d="M7.2 9.2h2.6l3.2 6.4 3.2-6.4h2.6l-4.6 8.6V23h-2.4v-5.2L7.2 9.2zm14.2 1.6c1.7 0 2.9.5 3.6 1.4.6.8.9 1.9.9 3.3s-.3 2.5-.9 3.3c-.7.9-1.9 1.4-3.6 1.4h-2.8V10.8h2.8zm-.2 7.6c.9 0 1.5-.2 1.9-.7.3-.5.5-1.2.5-2.2s-.2-1.7-.5-2.2c-.4-.5-1-.7-1.9-.7h-.7v5.8h.7z"/></svg>
         </span>
-        Yeni CV
+        Yeni Pro CV
       </a>
       <nav class="nav-links">
         <a href="templates.html" class="btn btn-ghost btn-sm">Templates</a>
@@ -67,7 +92,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>Yeni CV — Privacy-first resume builder. Built with pure HTML, CSS & JavaScript.</p>
+      <p>Yeni Pro CV — Privacy-first resume builder. Built with pure HTML, CSS & JavaScript.</p>
       <p style="margin-top:0.5rem;font-size:0.8rem;">Your data is stored locally in your browser and is never uploaded to a server.</p>
     </div>
   </footer>
