@@ -1,5 +1,5 @@
 /* ============================================
-   ResumeForge — Main Builder Logic
+   Yeni Pro CV — Main Builder Logic
    ============================================ */
 
 const Builder = {
@@ -15,16 +15,18 @@ const Builder = {
       this.resume = Storage.getResume(id);
     }
     if (!this.resume) {
-      // Blank resume — sample only via "Try Sample Resume" or "Load Sample"
       this.resume = Storage.createEmptyResume();
       Storage.saveResume(this.resume);
     }
 
-    // Ensure extra arrays exist
     ['awards','volunteer','publications','interests','references','achievements'].forEach(k => {
       if (!Array.isArray(this.resume[k])) this.resume[k] = [];
     });
     if (!this.resume.enabledSections) this.resume.enabledSections = {};
+    if (!this.resume.customization) this.resume.customization = {};
+    if (this.resume.customization.skillsDisplay === 'bars' || !this.resume.customization.skillsDisplay) {
+      this.resume.customization.skillsDisplay = 'text';
+    }
 
     this.bindUI();
     this.populateForm();
@@ -212,10 +214,8 @@ const Builder = {
         const key = cb.dataset.toggleSection;
         if (!this.resume.enabledSections) this.resume.enabledSections = {};
         this.resume.enabledSections[key] = cb.checked;
-
         const panel = document.getElementById(`extra-${key}`);
         if (panel) panel.classList.toggle('hidden', !cb.checked);
-
         const extraTypes = ['awards', 'volunteer', 'publications', 'interests', 'references', 'achievements'];
         if (cb.checked && extraTypes.includes(key)) {
           if (!Array.isArray(this.resume[key])) this.resume[key] = [];
@@ -225,7 +225,6 @@ const Builder = {
           }
           this.renderEntryList(key);
         }
-
         this.renderPreview();
         this.scheduleSave();
       });
@@ -245,7 +244,8 @@ const Builder = {
     document.querySelectorAll('[data-font]').forEach(b => b.classList.toggle('active', b.dataset.font === c.font));
     document.querySelectorAll('[data-fontsize]').forEach(b => b.classList.toggle('active', b.dataset.fontsize === c.fontSize));
     document.querySelectorAll('[data-spacing]').forEach(b => b.classList.toggle('active', b.dataset.spacing === c.spacing));
-    document.querySelectorAll('[data-skills-display]').forEach(b => b.classList.toggle('active', b.dataset.skillsDisplay === c.skillsDisplay));
+    const skillsDisplay = (c.skillsDisplay === 'bars' || !c.skillsDisplay) ? 'text' : c.skillsDisplay;
+    document.querySelectorAll('[data-skills-display]').forEach(b => b.classList.toggle('active', b.dataset.skillsDisplay === skillsDisplay));
     document.querySelectorAll('[data-photo-shape]').forEach(b => b.classList.toggle('active', b.dataset.photoShape === p.photoShape));
 
     ['experience','education','skills','projects','certifications','languages','awards','volunteer','publications','interests','references','achievements'].forEach(t => this.renderEntryList(t));
@@ -313,6 +313,17 @@ const Builder = {
         this.updateScore();
         this.scheduleSave();
       }, 200));
+      if (input.tagName === 'SELECT') {
+        input.addEventListener('change', () => {
+          const id = input.closest('.entry-card').dataset.id;
+          const field = input.dataset.field;
+          const item = (this.resume[type] || []).find(i => i.id === id);
+          if (!item) return;
+          item[field] = input.value;
+          this.renderPreview();
+          this.scheduleSave();
+        });
+      }
     });
     container.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -362,55 +373,73 @@ const Builder = {
   },
 
   skillCardHTML(item) {
-    return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;display:flex;gap:0.75rem;align-items:center;"><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" placeholder="Skill name" style="flex:1;" /><select data-field="level" class="skill-level-select">${['Beginner','Intermediate','Advanced','Expert'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>`;
+    return `
+      <div class="skill-card-inner">
+        <div class="skill-card-top">
+          <span class="drag-handle" title="Drag to reorder" aria-hidden="true">⠿</span>
+          <button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete" aria-label="Remove skill">✕</button>
+        </div>
+        <div class="form-group skill-name-group">
+          <label>Skill name</label>
+          <input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="Type skill name…" autocomplete="off" />
+        </div>
+        <div class="form-group skill-level-group">
+          <label>Level</label>
+          <select data-field="level" class="skill-level-select">
+            ${['Beginner','Intermediate','Advanced','Expert'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
   },
 
   projectCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.name) || 'New Project'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="up">↑</button><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="down">↓</button><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
       <div class="form-group"><label>Project Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div>
       <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${Utils.escapeHtml(item.description || '')}</textarea></div>
-      <div class="form-group"><label>Technologies</label><input data-field="technologies" value="${Utils.escapeHtml(item.technologies || '')}" placeholder="HTML, CSS, JavaScript" /></div>
-      <div class="form-row"><div class="form-group"><label>Project URL</label><input data-field="url" value="${Utils.escapeHtml(item.url || '')}" /></div><div class="form-group"><label>GitHub URL</label><input data-field="github" value="${Utils.escapeHtml(item.github || '')}" /></div></div>`;
+      <div class="form-group"><label>Technologies</label><input data-field="technologies" value="${Utils.escapeHtml(item.technologies || '')}" placeholder="HTML, CSS, JavaScript" /></div>`;
   },
 
   certCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.name) || 'New Certificate'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-row"><div class="form-group"><label>Certificate Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div><div class="form-group"><label>Organization</label><input data-field="organization" value="${Utils.escapeHtml(item.organization || '')}" /></div></div>
-      <div class="form-row"><div class="form-group"><label>Issue Date</label><input type="month" data-field="issueDate" value="${item.issueDate || ''}" /></div><div class="form-group"><label>Credential ID</label><input data-field="credentialId" value="${Utils.escapeHtml(item.credentialId || '')}" /></div></div>`;
+      <div class="form-row"><div class="form-group"><label>Certificate Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div><div class="form-group"><label>Organization</label><input data-field="organization" value="${Utils.escapeHtml(item.organization || '')}" /></div></div>`;
   },
 
   langCardHTML(item) {
-    return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;display:flex;gap:0.75rem;"><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" placeholder="Language" style="flex:1;" /><select data-field="level">${['Native','Fluent','Advanced','Intermediate','Basic'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>`;
+    return `
+      <div class="skill-card-inner">
+        <div class="skill-card-top">
+          <span class="drag-handle">⠿</span>
+          <button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button>
+        </div>
+        <div class="form-group"><label>Language</label><input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="e.g. English" /></div>
+        <div class="form-group"><label>Level</label><select data-field="level">${['Native','Fluent','Advanced','Intermediate','Basic'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
+      </div>`;
   },
 
   awardCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.name) || 'New Award'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-row"><div class="form-group"><label>Award Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div><div class="form-group"><label>Date</label><input type="month" data-field="date" value="${item.date || ''}" /></div></div>
+      <div class="form-group"><label>Award Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div>
       <div class="form-group"><label>Description</label><input data-field="description" value="${Utils.escapeHtml(item.description || '')}" /></div>`;
   },
 
   volunteerCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.role) || 'New Role'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-row"><div class="form-group"><label>Role</label><input data-field="role" value="${Utils.escapeHtml(item.role || '')}" /></div><div class="form-group"><label>Organization</label><input data-field="organization" value="${Utils.escapeHtml(item.organization || '')}" /></div></div>
-      <div class="form-row"><div class="form-group"><label>Start</label><input type="month" data-field="startDate" value="${item.startDate || ''}" /></div><div class="form-group"><label>End</label><input type="month" data-field="endDate" value="${item.endDate || ''}" /></div></div>
-      <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${Utils.escapeHtml(item.description || '')}</textarea></div>`;
+      <div class="form-row"><div class="form-group"><label>Role</label><input data-field="role" value="${Utils.escapeHtml(item.role || '')}" /></div><div class="form-group"><label>Organization</label><input data-field="organization" value="${Utils.escapeHtml(item.organization || '')}" /></div></div>`;
   },
 
   publicationCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.title) || 'New Publication'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-group"><label>Title</label><input data-field="title" value="${Utils.escapeHtml(item.title || '')}" /></div>
-      <div class="form-row"><div class="form-group"><label>Publisher</label><input data-field="publisher" value="${Utils.escapeHtml(item.publisher || '')}" /></div><div class="form-group"><label>Date</label><input type="month" data-field="date" value="${item.date || ''}" /></div></div>
-      <div class="form-group"><label>URL</label><input data-field="url" value="${Utils.escapeHtml(item.url || '')}" /></div>`;
+      <div class="form-group"><label>Title</label><input data-field="title" value="${Utils.escapeHtml(item.title || '')}" /></div>`;
   },
 
   interestCardHTML(item) {
-    return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" placeholder="Interest (e.g. Photography)" style="width:100%;" /></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>`;
+    return `<div class="skill-card-inner"><div class="skill-card-top"><span class="drag-handle">⠿</span><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div><div class="form-group"><label>Interest</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" placeholder="e.g. Photography" /></div></div>`;
   },
 
   referenceCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.name) || 'New Reference'}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-row"><div class="form-group"><label>Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div><div class="form-group"><label>Contact</label><input data-field="contact" value="${Utils.escapeHtml(item.contact || '')}" placeholder="email or phone" /></div></div>
-      <div class="form-group"><label>Relationship</label><input data-field="relationship" value="${Utils.escapeHtml(item.relationship || '')}" placeholder="Former manager, colleague..." /></div>`;
+      <div class="form-group"><label>Name</label><input data-field="name" value="${Utils.escapeHtml(item.name || '')}" /></div>
+      <div class="form-group"><label>Contact</label><input data-field="contact" value="${Utils.escapeHtml(item.contact || '')}" /></div>`;
   },
 
   achievementCardHTML(item) {
