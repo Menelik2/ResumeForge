@@ -15,16 +15,9 @@ const Builder = {
       this.resume = Storage.getResume(id);
     }
     if (!this.resume) {
-      this.resume = Storage.getSampleResume();
+      // Blank resume — sample only via "Try Sample Resume" or "Load Sample"
+      this.resume = Storage.createEmptyResume();
       Storage.saveResume(this.resume);
-      setTimeout(() => Utils.toast('Sample resume loaded — edit anything to make it yours!', 'info', 4000), 600);
-    } else if (!this.resume.personal?.fullName && !(this.resume.experience||[]).length) {
-      const sample = Storage.getSampleResume();
-      sample.id = this.resume.id;
-      sample.title = this.resume.title || 'Software Developer Resume';
-      this.resume = sample;
-      Storage.saveResume(this.resume);
-      setTimeout(() => Utils.toast('Sample resume loaded — edit anything to make it yours!', 'info', 4000), 600);
     }
 
     // Ensure extra arrays exist
