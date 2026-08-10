@@ -13,25 +13,46 @@
 </head>
 <body>
   <div id="splash" class="splash" role="dialog" aria-label="Welcome to Yeni Pro CV">
-    <div class="splash-bg"></div>
+    <div class="splash-bg">
+      <span class="splash-orb splash-orb-1"></span>
+      <span class="splash-orb splash-orb-2"></span>
+      <span class="splash-orb splash-orb-3"></span>
+      <span class="splash-particle" style="--i:0"></span>
+      <span class="splash-particle" style="--i:1"></span>
+      <span class="splash-particle" style="--i:2"></span>
+      <span class="splash-particle" style="--i:3"></span>
+      <span class="splash-particle" style="--i:4"></span>
+      <span class="splash-particle" style="--i:5"></span>
+      <span class="splash-particle" style="--i:6"></span>
+      <span class="splash-particle" style="--i:7"></span>
+    </div>
     <div class="splash-content">
-      <div class="splash-logo">
-        <svg viewBox="0 0 40 40" width="72" height="72" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="splash-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#2563eb"/>
-              <stop offset="1" stop-color="#7c3aed"/>
-            </linearGradient>
-          </defs>
-          <rect width="40" height="40" rx="12" fill="url(#splash-grad)"/>
-          <path d="M12 10h12l4 4v16a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="white" fill-opacity="0.2"/>
-          <path d="M24 10v4h4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-          <text x="20" y="26" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-weight="800" font-size="13">YC</text>
-        </svg>
+      <div class="splash-logo-wrap">
+        <div class="splash-ring"></div>
+        <div class="splash-logo">
+          <svg viewBox="0 0 40 40" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="splash-grad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2563eb"/>
+                <stop offset="1" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
+            <rect width="40" height="40" rx="12" fill="url(#splash-grad)"/>
+            <path d="M12 10h12l4 4v16a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V12a2 2 0 0 1 2-2z" fill="white" fill-opacity="0.2"/>
+            <path d="M24 10v4h4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+            <text x="20" y="26" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-weight="800" font-size="13">YC</text>
+          </svg>
+        </div>
       </div>
       <h1 class="splash-title">Yeni Pro CV</h1>
       <p class="splash-tagline">Build a professional resume in minutes</p>
-      <button type="button" id="splash-enter" class="splash-btn">Get Started</button>
+      <button type="button" id="splash-enter" class="splash-btn">
+        <span class="splash-btn-text">Get Started</span>
+        <span class="splash-btn-shine"></span>
+      </button>
+      <div class="splash-progress" aria-hidden="true">
+        <div class="splash-progress-bar"></div>
+      </div>
       <p class="splash-hint">Your data stays on your device · No account needed</p>
     </div>
   </div>
