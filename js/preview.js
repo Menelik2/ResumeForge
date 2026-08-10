@@ -54,6 +54,18 @@ const Preview = {
     return parts.join('  ·  ');
   },
 
+  /** Vertical contact block for right-side placement (PDF-friendly) */
+  contactBlockRight(p) {
+    const lines = [];
+    if (p.email) lines.push(`<div style="margin-bottom:3px;">📧 ${Utils.escapeHtml(p.email)}</div>`);
+    if (p.phone) lines.push(`<div style="margin-bottom:3px;">📱 ${Utils.escapeHtml(p.phone)}</div>`);
+    if (p.location) lines.push(`<div style="margin-bottom:3px;">📍 ${Utils.escapeHtml(p.location)}</div>`);
+    if (p.website) lines.push(`<div style="margin-bottom:3px;">🌐 ${Utils.escapeHtml(p.website)}</div>`);
+    if (p.linkedin) lines.push(`<div style="margin-bottom:3px;">🔗 ${Utils.escapeHtml(p.linkedin)}</div>`);
+    if (p.github) lines.push(`<div style="margin-bottom:3px;">🐙 ${Utils.escapeHtml(p.github)}</div>`);
+    return lines.join('');
+  },
+
   sectionTitle(title, accent) {
     return `<h2 class="resume-section-title" style="color:${accent};border-bottom:2px solid ${accent};padding-bottom:4px;margin:16px 0 8px;font-size:1.05em;text-transform:uppercase;letter-spacing:0.06em;">${title}</h2>`;
   },
@@ -80,7 +92,7 @@ const Preview = {
     const enabled = r.enabledSections || {};
     let body = '';
     if (p.summary) body += this.sectionTitle('Professional Summary', accent) + `<p style="margin:0 0 8px;">${Utils.escapeHtml(p.summary).replace(/\n/g, '<br>')}</p>`;
-    if (enabled.experience && r.experience.length) {
+    if (enabled.experience !== false && r.experience && r.experience.length) {
       body += this.sectionTitle('Experience', accent);
       r.experience.forEach(e => {
         body += `<div class="resume-section" style="margin-bottom:12px;">
@@ -93,7 +105,7 @@ const Preview = {
         </div>`;
       });
     }
-    if (enabled.education && r.education.length) {
+    if (enabled.education !== false && r.education && r.education.length) {
       body += this.sectionTitle('Education', accent);
       r.education.forEach(e => {
         body += `<div class="resume-section" style="margin-bottom:10px;">
@@ -106,8 +118,8 @@ const Preview = {
         </div>`;
       });
     }
-    if (enabled.skills && r.skills.length) body += this.sectionTitle('Skills', accent) + this.skillsHtml(r.skills, r.customization?.skillsDisplay || 'bars', accent);
-    if (enabled.projects && r.projects.length) {
+    if (enabled.skills !== false && r.skills && r.skills.length) body += this.sectionTitle('Skills', accent) + this.skillsHtml(r.skills, r.customization?.skillsDisplay || 'bars', accent);
+    if (enabled.projects !== false && r.projects && r.projects.length) {
       body += this.sectionTitle('Projects', accent);
       r.projects.forEach(pr => {
         body += `<div class="resume-section" style="margin-bottom:10px;">
@@ -117,22 +129,26 @@ const Preview = {
         </div>`;
       });
     }
-    if (enabled.certifications && r.certifications.length) {
+    if (enabled.certifications !== false && r.certifications && r.certifications.length) {
       body += this.sectionTitle('Certifications', accent);
       r.certifications.forEach(c => {
         body += `<div style="margin-bottom:6px;"><strong>${Utils.escapeHtml(c.name)}</strong> — ${Utils.escapeHtml(c.organization)} <span style="color:#64748b;font-size:0.9em;">(${Utils.formatDate(c.issueDate)})</span></div>`;
       });
     }
-    if (enabled.languages && r.languages.length) {
+    if (enabled.languages !== false && r.languages && r.languages.length) {
       body += this.sectionTitle('Languages', accent) + `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(' · ')}</div>`;
     }
     return `<div style="padding:18mm 16mm;">
-      <div style="display:flex;align-items:center;gap:18px;margin-bottom:12px;">
-        ${this.photoHtml(p, 85)}
-        <div>
-          <h1 style="margin:0;font-size:1.8em;font-weight:700;color:#0f172a;letter-spacing:-0.02em;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
-          <div style="color:${accent};font-size:1.15em;font-weight:500;margin-top:2px;">${Utils.escapeHtml(p.title) || 'Professional Title'}</div>
-          <div style="font-size:0.85em;color:#64748b;margin-top:6px;">${this.contactLine(p)}</div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:14px;border-bottom:2px solid ${accent};padding-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:16px;flex:1;min-width:0;">
+          ${this.photoHtml(p, 80)}
+          <div>
+            <h1 style="margin:0;font-size:1.75em;font-weight:700;color:#0f172a;letter-spacing:-0.02em;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
+            <div style="color:${accent};font-size:1.1em;font-weight:500;margin-top:3px;">${Utils.escapeHtml(p.title) || 'Professional Title'}</div>
+          </div>
+        </div>
+        <div style="text-align:right;font-size:0.82em;color:#475569;line-height:1.55;flex-shrink:0;max-width:42%;">
+          ${this.contactBlockRight(p)}
         </div>
       </div>
       ${body}
@@ -177,7 +193,7 @@ const Preview = {
           ${p.linkedin ? `<div>🔗 ${Utils.escapeHtml(p.linkedin)}</div>` : ''}
           ${p.github ? `<div>🐙 ${Utils.escapeHtml(p.github)}</div>` : ''}
         </div>
-        ${r.skills.length ? `<div style="margin-top:20px;"><strong style="font-size:0.85em;">SKILLS</strong><div style="margin-top:8px;">${this.skillsHtml(r.skills, 'badges', '#fff')}</div></div>` : ''}
+        ${r.skills && r.skills.length ? `<div style="margin-top:20px;"><strong style="font-size:0.85em;">SKILLS</strong><div style="margin-top:8px;">${this.skillsHtml(r.skills, 'badges', '#fff')}</div></div>` : ''}
       </div>
       <div style="padding:14mm 12mm;">${this._simpleSections(r, accent, false, ['skills'])}</div>
     </div>`;
@@ -199,15 +215,13 @@ const Preview = {
   tplExecutive(r, accent) {
     const p = r.personal;
     return `<div style="padding:16mm;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid ${accent};padding-bottom:10px;margin-bottom:14px;">
-        <div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid ${accent};padding-bottom:12px;margin-bottom:14px;gap:20px;">
+        <div style="flex:1;">
           <h1 style="margin:0;font-size:1.75em;font-weight:700;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
           <div style="color:${accent};font-size:1.1em;margin-top:2px;">${Utils.escapeHtml(p.title)}</div>
         </div>
-        <div style="text-align:right;font-size:0.8em;color:#64748b;line-height:1.6;">
-          ${p.email ? `<div>📧 ${Utils.escapeHtml(p.email)}</div>` : ''}
-          ${p.phone ? `<div>📱 ${Utils.escapeHtml(p.phone)}</div>` : ''}
-          ${p.location ? `<div>📍 ${Utils.escapeHtml(p.location)}</div>` : ''}
+        <div style="text-align:right;font-size:0.82em;color:#475569;line-height:1.55;flex-shrink:0;">
+          ${this.contactBlockRight(p)}
         </div>
       </div>
       ${this._simpleSections(r, accent)}
@@ -251,7 +265,7 @@ const Preview = {
           ${p.linkedin ? `<div>🔗 ${Utils.escapeHtml(p.linkedin)}</div>` : ''}
           ${p.github ? `<div>🐙 ${Utils.escapeHtml(p.github)}</div>` : ''}
         </div>
-        ${r.skills.length ? `<div style="margin-bottom:14px;"><strong style="color:${accent};font-size:0.85em;">SKILLS</strong><div style="margin-top:6px;">${this.skillsHtml(r.skills, 'badges', accent)}</div></div>` : ''}
+        ${r.skills && r.skills.length ? `<div style="margin-bottom:14px;"><strong style="color:${accent};font-size:0.85em;">SKILLS</strong><div style="margin-top:6px;">${this.skillsHtml(r.skills, 'badges', accent)}</div></div>` : ''}
       </div>
       <div style="padding:14mm 12mm;">${this._simpleSections(r, accent, false, ['skills'])}</div>
     </div>`;
@@ -260,17 +274,23 @@ const Preview = {
   tplATS(r, accent) {
     const p = r.personal;
     return `<div style="padding:15mm 18mm;font-family:Arial,Helvetica,sans-serif;font-size:11pt;">
-      <h1 style="margin:0;font-size:16pt;font-weight:700;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
-      <div style="margin:2px 0 4px;">${Utils.escapeHtml(p.title)}</div>
-      <div style="font-size:10pt;margin-bottom:12px;">${this.contactLine(p)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px;border-bottom:1px solid #333;padding-bottom:8px;">
+        <div>
+          <h1 style="margin:0;font-size:16pt;font-weight:700;">${Utils.escapeHtml(p.fullName) || 'Your Name'}</h1>
+          <div style="margin:2px 0 0;">${Utils.escapeHtml(p.title)}</div>
+        </div>
+        <div style="text-align:right;font-size:9.5pt;line-height:1.5;">
+          ${this.contactBlockRight(p)}
+        </div>
+      </div>
       ${p.summary ? `<div style="margin-bottom:10px;"><strong>PROFESSIONAL SUMMARY</strong><br>${Utils.escapeHtml(p.summary)}</div>` : ''}
-      ${r.experience.length ? `<div style="margin-bottom:10px;"><strong>EXPERIENCE</strong>${r.experience.map(e => `
+      ${r.experience && r.experience.length ? `<div style="margin-bottom:10px;"><strong>EXPERIENCE</strong>${r.experience.map(e => `
         <div style="margin:6px 0;"><strong>${Utils.escapeHtml(e.jobTitle)}</strong> | ${Utils.escapeHtml(e.company)} | ${Utils.formatDate(e.startDate)} – ${e.current ? 'Present' : Utils.formatDate(e.endDate)}<br>
         ${Utils.escapeHtml(e.description || '').replace(/\n/g, '<br>')}</div>`).join('')}</div>` : ''}
-      ${r.education.length ? `<div style="margin-bottom:10px;"><strong>EDUCATION</strong>${r.education.map(e => `
+      ${r.education && r.education.length ? `<div style="margin-bottom:10px;"><strong>EDUCATION</strong>${r.education.map(e => `
         <div style="margin:4px 0;">${Utils.escapeHtml(e.degree)} — ${Utils.escapeHtml(e.institution)} (${Utils.formatDate(e.startDate)} – ${Utils.formatDate(e.endDate)})</div>`).join('')}</div>` : ''}
-      ${r.skills.length ? `<div style="margin-bottom:10px;"><strong>SKILLS</strong><br>${r.skills.map(s => Utils.escapeHtml(s.name)).join(', ')}</div>` : ''}
-      ${r.projects.length ? `<div style="margin-bottom:10px;"><strong>PROJECTS</strong>${r.projects.map(pr => `
+      ${r.skills && r.skills.length ? `<div style="margin-bottom:10px;"><strong>SKILLS</strong><br>${r.skills.map(s => Utils.escapeHtml(s.name)).join(', ')}</div>` : ''}
+      ${r.projects && r.projects.length ? `<div style="margin-bottom:10px;"><strong>PROJECTS</strong>${r.projects.map(pr => `
         <div style="margin:4px 0;"><strong>${Utils.escapeHtml(pr.name)}</strong>: ${Utils.escapeHtml(pr.description || '')}</div>`).join('')}</div>` : ''}
     </div>`;
   },
@@ -278,7 +298,7 @@ const Preview = {
   _simpleSections(r, accent, minimal = false, skip = []) {
     const enabled = r.enabledSections || {};
     let html = '';
-    if (enabled.experience && r.experience.length && !skip.includes('experience')) {
+    if (enabled.experience !== false && r.experience && r.experience.length && !skip.includes('experience')) {
       html += this.sectionTitle('Experience', accent);
       r.experience.forEach(e => {
         html += `<div class="resume-section" style="margin-bottom:10px;">
@@ -288,28 +308,28 @@ const Preview = {
         </div>`;
       });
     }
-    if (enabled.education && r.education.length && !skip.includes('education')) {
+    if (enabled.education !== false && r.education && r.education.length && !skip.includes('education')) {
       html += this.sectionTitle('Education', accent);
       r.education.forEach(e => {
         html += `<div style="margin-bottom:8px;"><strong>${Utils.escapeHtml(e.degree)}</strong> — ${Utils.escapeHtml(e.institution)} <span style="color:#64748b;font-size:0.9em;">(${Utils.formatDate(e.startDate)} – ${Utils.formatDate(e.endDate)})</span></div>`;
       });
     }
-    if (enabled.skills && r.skills.length && !skip.includes('skills')) {
+    if (enabled.skills !== false && r.skills && r.skills.length && !skip.includes('skills')) {
       html += this.sectionTitle('Skills', accent) + this.skillsHtml(r.skills, r.customization?.skillsDisplay || 'bars', accent);
     }
-    if (enabled.projects && r.projects.length && !skip.includes('projects')) {
+    if (enabled.projects !== false && r.projects && r.projects.length && !skip.includes('projects')) {
       html += this.sectionTitle('Projects', accent);
       r.projects.forEach(pr => {
         html += `<div style="margin-bottom:8px;"><strong>${Utils.escapeHtml(pr.name)}</strong>${pr.technologies ? ` <span style="color:#64748b;">(${Utils.escapeHtml(pr.technologies)})</span>` : ''}<div>${Utils.escapeHtml(pr.description || '')}</div></div>`;
       });
     }
-    if (enabled.certifications && r.certifications.length && !skip.includes('certifications')) {
+    if (enabled.certifications !== false && r.certifications && r.certifications.length && !skip.includes('certifications')) {
       html += this.sectionTitle('Certifications', accent);
       r.certifications.forEach(c => {
         html += `<div style="margin-bottom:4px;">${Utils.escapeHtml(c.name)} — ${Utils.escapeHtml(c.organization)} (${Utils.formatDate(c.issueDate)})</div>`;
       });
     }
-    if (enabled.languages && r.languages.length && !skip.includes('languages')) {
+    if (enabled.languages !== false && r.languages && r.languages.length && !skip.includes('languages')) {
       html += this.sectionTitle('Languages', accent) + `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(' · ')}</div>`;
     }
     return html;
