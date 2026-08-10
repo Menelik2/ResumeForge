@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Templates — ResumeForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/templates.css" />
+</head>
+<body>
+  <div class="templates-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">RF</span>
+          ResumeForge
+        </a>
+        <nav class="nav-links">
+          <a href="index.html" class="btn btn-ghost btn-sm">Dashboard</a>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="templates-hero">
+        <h1>Choose a Template</h1>
+        <p>Select a professional design that matches your style. You can change templates anytime without losing your data.</p>
+      </div>
+
+      <div class="template-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="professional">Professional</button>
+        <button class="filter-btn" data-filter="creative">Creative</button>
+        <button class="filter-btn" data-filter="minimal">Minimal</button>
+        <button class="filter-btn" data-filter="ats">ATS</button>
+        <button class="filter-btn" data-filter="student">Student</button>
+        <button class="filter-btn" data-filter="developer">Developer</button>
+      </div>
+
+      <div id="template-grid" class="template-grid"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>ResumeForge — All templates work offline and keep your data private.</p>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast-container"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/templates.js"></script>
+</body>
+</html>
