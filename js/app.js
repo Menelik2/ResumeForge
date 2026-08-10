@@ -1,12 +1,45 @@
 /* ============================================
-   ResumeForge — Dashboard Logic
+   Yeni Pro CV — Dashboard Logic
    ============================================ */
 
 const App = {
   init() {
     Utils.initTheme();
+    this.initSplash();
     this.renderResumeList();
     this.bindEvents();
+  },
+
+  initSplash() {
+    const splash = document.getElementById('splash');
+    if (!splash) return;
+
+    const seen = sessionStorage.getItem('yeni-pro-cv-splash');
+    if (seen) {
+      splash.classList.add('is-hidden');
+      splash.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    document.body.classList.add('splash-active');
+    const dismiss = () => {
+      splash.classList.add('is-hidden');
+      splash.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('splash-active');
+      sessionStorage.setItem('yeni-pro-cv-splash', '1');
+    };
+
+    document.getElementById('splash-enter')?.addEventListener('click', dismiss);
+    setTimeout(() => {
+      if (!splash.classList.contains('is-hidden')) dismiss();
+    }, 3500);
+    const onKey = (e) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+        dismiss();
+        window.removeEventListener('keydown', onKey);
+      }
+    };
+    window.addEventListener('keydown', onKey);
   },
 
   bindEvents() {
