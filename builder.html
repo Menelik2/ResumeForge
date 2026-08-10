@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#0d9488" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Editor — Yeni CV</title>
+  <title>Editor — Yeni Pro CV</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -19,7 +18,9 @@
     <div class="builder-header-inner">
       <div class="builder-header-left">
         <a href="index.html" class="logo" style="font-size:1rem;">
-          <span class="logo-icon" style="width:28px;height:28px;font-size:0.8rem;">YC</span>
+          <span class="logo-icon logo-icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="28" height="28"><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0d9488"/><stop offset="1" stop-color="#047857"/></linearGradient><rect width="32" height="32" rx="8" fill="url(#g)"/><path fill="#fff" d="M7.2 9.2h2.6l3.2 6.4 3.2-6.4h2.6l-4.6 8.6V23h-2.4v-5.2L7.2 9.2zm14.2 1.6c1.7 0 2.9.5 3.6 1.4.6.8.9 1.9.9 3.3s-.3 2.5-.9 3.3c-.7.9-1.9 1.4-3.6 1.4h-2.8V10.8h2.8zm-.2 7.6c.9 0 1.5-.2 1.9-.7.3-.5.5-1.2.5-2.2s-.2-1.7-.5-2.2c-.4-.5-1-.7-1.9-.7h-.7v5.8h.7z"/></svg>
+          </span>
         </a>
         <input type="text" id="resume-title" class="resume-title-input" value="Untitled Resume" aria-label="Resume title" />
         <span id="auto-save" class="auto-save-indicator saved">Saved</span>
@@ -120,7 +121,7 @@
         </div>
         <div class="editor-section-body">
           <div class="skills-display-toggle">
-            <button type="button" data-skills-display="bars" class="active">Progress Bars</button>
+            <button type="button" data-skills-display="text" class="active">Text list</button>
             <button type="button" data-skills-display="badges">Badges</button>
           </div>
           <div id="skills-list"></div>
@@ -170,9 +171,9 @@
           <div class="form-group">
             <label>Accent Color</label>
             <div class="color-swatches">
-              <button type="button" class="color-swatch active" data-accent="#2563eb" style="background:#2563eb;" title="Blue"></button>
+              <button type="button" class="color-swatch active" data-accent="#0d9488" style="background:#0d9488;" title="Teal"></button>
               <button type="button" class="color-swatch" data-accent="#0f172a" style="background:#0f172a;" title="Black"></button>
-              <button type="button" class="color-swatch" data-accent="#7c3aed" style="background:#7c3aed;" title="Purple"></button>
+              <button type="button" class="color-swatch" data-accent="#2563eb" style="background:#2563eb;" title="Blue"></button>
               <button type="button" class="color-swatch" data-accent="#059669" style="background:#059669;" title="Green"></button>
               <button type="button" class="color-swatch" data-accent="#dc2626" style="background:#dc2626;" title="Red"></button>
               <button type="button" class="color-swatch" data-accent="#ea580c" style="background:#ea580c;" title="Orange"></button>
