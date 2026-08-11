@@ -13,14 +13,12 @@ const Preview = {
     const spacingMap = { compact: '1.25', normal: '1.45', comfortable: '1.65' };
     const fs = fontSizeMap[c.fontSize] || '10.5pt';
     const lh = spacingMap[c.spacing] || '1.45';
-
     container.style.setProperty('--resume-accent', accent);
     container.style.setProperty('--resume-font', font);
     container.style.fontFamily = font + ', system-ui, sans-serif';
     container.style.fontSize = fs;
     container.style.lineHeight = lh;
     container.dataset.template = t;
-
     let html = '';
     switch (t) {
       case 'minimal': html = this.tplMinimal(resume, accent); break;
@@ -77,11 +75,10 @@ const Preview = {
   skillsHtml(skills, display, accent) {
     if (!skills || !skills.length) return '';
     if (display === 'badges') {
-      return `<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s =>
-        `<span style="background:${accent}18;color:${accent};padding:3px 10px;border-radius:999px;font-size:0.9em;font-weight:500;">${Utils.escapeHtml(s.name)}${s.level ? ' · ' + Utils.escapeHtml(s.level) : ''}</span>`
+      return `<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">${skills.map(s =>
+        `<span style="background:${accent}18;color:${accent};padding:3px 10px;border-radius:999px;font-size:0.9em;font-weight:500;white-space:nowrap;">${Utils.escapeHtml(s.name)}${s.level ? ' · ' + Utils.escapeHtml(s.level) : ''}</span>`
       ).join('')}</div>`;
     }
-    // Inline text (one flowing line for PDF/ATS): Skill (Level), Skill (Level)
     const parts = skills.map(s => {
       const name = Utils.escapeHtml(s.name || '');
       const level = s.level ? ` (${Utils.escapeHtml(s.level)})` : '';
@@ -122,7 +119,8 @@ const Preview = {
               <strong>${Utils.escapeHtml(e.degree)}</strong>
               <span style="font-size:0.9em;color:#64748b;">${Utils.formatDate(e.startDate)} – ${Utils.formatDate(e.endDate)}</span>
             </div>
-            <div style="color:#475569;">${Utils.escapeHtml(e.institution)}${e.location ? ' · ' + Utils.escapeHtml(e.location) : ''}</div>
+            <div style="color:#475569;">${Utils.escapeHtml(e.institution)}${e.location ? ' · ' + Utils.escapeHtml(e.location) : ''}${e.gpa ? ' · GPA: ' + Utils.escapeHtml(e.gpa) : ''}</div>
+            ${e.description ? `<div style="margin-top:2px;font-size:0.95em;">${Utils.escapeHtml(e.description)}</div>` : ''}
           </div>`);
       },
       skills: () => {
@@ -291,7 +289,7 @@ const Preview = {
       ${(r.experience||[]).length ? `<div style="margin-bottom:10px;"><strong>EXPERIENCE</strong>${r.experience.map(e => `
         <div style="margin:6px 0;"><strong>${Utils.escapeHtml(e.jobTitle)}</strong> | ${Utils.escapeHtml(e.company)} | ${Utils.formatDate(e.startDate)} – ${e.current ? 'Present' : Utils.formatDate(e.endDate)}<br>${Utils.escapeHtml(e.description || '')}</div>`).join('')}</div>` : ''}
       ${(r.education||[]).length ? `<div style="margin-bottom:10px;"><strong>EDUCATION</strong>${r.education.map(e => `
-        <div style="margin:4px 0;">${Utils.escapeHtml(e.degree)} — ${Utils.escapeHtml(e.institution)}</div>`).join('')}</div>` : ''}
+        <div style="margin:4px 0;">${Utils.escapeHtml(e.degree)} — ${Utils.escapeHtml(e.institution)}${e.gpa ? ' · GPA: ' + Utils.escapeHtml(e.gpa) : ''} (${Utils.formatDate(e.startDate)} – ${Utils.formatDate(e.endDate)})</div>`).join('')}</div>` : ''}
       ${(r.skills||[]).length ? `<div style="margin-bottom:10px;"><strong>SKILLS</strong><br>${r.skills.map(s => Utils.escapeHtml(s.name) + (s.level ? ' (' + Utils.escapeHtml(s.level) + ')' : '')).join(', ')}</div>` : ''}
     </div>`;
   },
@@ -313,7 +311,7 @@ const Preview = {
       }
       if (key === 'education' && enabled.education && (r.education||[]).length) {
         html += this.sectionTitle('Education', accent);
-        html += this.renderItems(r.education, e => `<div style="margin-bottom:8px;"><strong>${Utils.escapeHtml(e.degree)}</strong> — ${Utils.escapeHtml(e.institution)}</div>`);
+        html += this.renderItems(r.education, e => `<div style="margin-bottom:8px;"><strong>${Utils.escapeHtml(e.degree)}</strong> — ${Utils.escapeHtml(e.institution)}${e.gpa ? ' · GPA: ' + Utils.escapeHtml(e.gpa) : ''} <span style="color:#64748b;font-size:0.9em;">(${Utils.formatDate(e.startDate)} – ${Utils.formatDate(e.endDate)})</span>${e.description ? `<div style="font-size:0.95em;">${Utils.escapeHtml(e.description)}</div>` : ''}</div>`);
       }
       if (key === 'skills' && enabled.skills && (r.skills||[]).length) {
         html += this.sectionTitle('Skills', accent) + this.skillsHtml(r.skills, r.customization?.skillsDisplay || 'text', accent);
