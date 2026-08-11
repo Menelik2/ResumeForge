@@ -126,7 +126,6 @@
 .entry-actions { display: flex; gap: 0.15rem; margin-left: auto; }
 .drag-handle { cursor: grab; color: var(--text-muted); padding: 0.25rem; }
 
-/* Skills / languages stacked fields (mobile-safe) */
 .skill-card-inner {
   display: flex;
   flex-direction: column;
@@ -261,6 +260,7 @@
   .resume-paper { transform: scale(0.7); margin-bottom: -30%; }
 }
 
+/* Mobile bottom nav */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -270,11 +270,13 @@
   background: var(--bg-secondary);
   border-top: 1px solid var(--border);
   z-index: 80;
-  padding: 0.35rem 0 calc(0.35rem + env(safe-area-inset-bottom, 0px));
+  padding: 0.25rem 0 calc(0.25rem + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
 }
 .mobile-nav-inner {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   max-width: 480px;
   margin: 0 auto;
 }
@@ -282,17 +284,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
-  padding: 0.5rem 0.6rem;
-  font-size: 0.6875rem;
+  gap: 2px;
+  padding: 6px 10px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1.2;
   color: var(--text-muted);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
   min-width: 56px;
-  min-height: 48px;
+  min-height: 44px;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+.mobile-nav-btn span {
+  font-size: 0.65rem;
 }
 .mobile-nav-btn.active {
   color: var(--primary);
   background: var(--primary-light);
+}
+/* Fixed real icon size */
+.mobile-nav-btn svg,
+.mobile-nav-btn .nav-icon {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  flex-shrink: 0;
+  display: block;
 }
 
 @media (max-width: 900px) {
@@ -310,7 +335,7 @@
   .preview-panel {
     display: none;
     padding: 0.75rem;
-    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
   .editor-panel.mobile-active,
   .preview-panel.mobile-active { display: block; }
@@ -334,4 +359,18 @@
   .builder-header-right #btn-print,
   .builder-header-right #change-template { display: none; }
   .resume-paper { transform: scale(0.42); margin-bottom: -58%; }
+  .mobile-nav-btn {
+    min-width: 48px;
+    padding: 4px 6px;
+    font-size: 0.6rem;
+  }
+  .mobile-nav-btn svg,
+  .mobile-nav-btn .nav-icon {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px;
+    min-height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+  }
 }
