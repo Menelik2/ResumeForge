@@ -1,5 +1,5 @@
 /* ============================================
-   ResumeForge — Utility Functions
+   Yeni Pro CV — Utility Functions
    ============================================ */
 
 const Utils = {
@@ -89,21 +89,26 @@ const Utils = {
   },
 
   enableDragSort(container, itemSelector, onReorder) {
-    let dragItem = null;
+    // Avoid stacking listeners when lists re-render
+    if (container.dataset.dragSortBound === '1') return;
+    container.dataset.dragSortBound = '1';
 
     container.addEventListener('dragstart', (e) => {
+      // Don't start drag from form controls (breaks typing on mobile)
+      if (e.target.closest('input, textarea, select, button, a, label')) {
+        e.preventDefault();
+        return;
+      }
       const item = e.target.closest(itemSelector);
       if (!item) return;
-      dragItem = item;
       item.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', '');
+      try { e.dataTransfer.setData('text/plain', item.dataset.id || ''); } catch (_) {}
     });
 
     container.addEventListener('dragend', (e) => {
       const item = e.target.closest(itemSelector);
       if (item) item.classList.remove('dragging');
-      dragItem = null;
       container.querySelectorAll(itemSelector).forEach(el => el.classList.remove('drag-over'));
     });
 
@@ -112,11 +117,8 @@ const Utils = {
       const after = Utils.getDragAfterElement(container, e.clientY, itemSelector);
       const dragging = container.querySelector('.dragging');
       if (!dragging) return;
-      if (after == null) {
-        container.appendChild(dragging);
-      } else {
-        container.insertBefore(dragging, after);
-      }
+      if (after == null) container.appendChild(dragging);
+      else container.insertBefore(dragging, after);
     });
 
     container.addEventListener('drop', (e) => {
