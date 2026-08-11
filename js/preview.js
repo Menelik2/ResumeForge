@@ -76,15 +76,18 @@ const Preview = {
 
   skillsHtml(skills, display, accent) {
     if (!skills || !skills.length) return '';
-    // Text only — no percent bars (mobile, ATS, and PDF friendly)
     if (display === 'badges') {
       return `<div style="display:flex;flex-wrap:wrap;gap:6px;">${skills.map(s =>
         `<span style="background:${accent}18;color:${accent};padding:3px 10px;border-radius:999px;font-size:0.9em;font-weight:500;">${Utils.escapeHtml(s.name)}${s.level ? ' · ' + Utils.escapeHtml(s.level) : ''}</span>`
       ).join('')}</div>`;
     }
-    return `<div style="display:flex;flex-direction:column;gap:4px;">${skills.map(s =>
-      `<div style="font-size:0.95em;line-height:1.4;"><strong>${Utils.escapeHtml(s.name || '')}</strong>${s.level ? ` <span style="color:#64748b;">— ${Utils.escapeHtml(s.level)}</span>` : ''}</div>`
-    ).join('')}</div>`;
+    // Inline text (one flowing line for PDF/ATS): Skill (Level), Skill (Level)
+    const parts = skills.map(s => {
+      const name = Utils.escapeHtml(s.name || '');
+      const level = s.level ? ` (${Utils.escapeHtml(s.level)})` : '';
+      return name + level;
+    });
+    return `<div style="font-size:0.95em;line-height:1.55;">${parts.join(', ')}</div>`;
   },
 
   renderItems(items, renderer) {
@@ -142,7 +145,7 @@ const Preview = {
       },
       languages: () => {
         if (!enabled.languages || !(r.languages||[]).length) return '';
-        return this.sectionTitle('Languages', accent) + `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(' · ')}</div>`;
+        return this.sectionTitle('Languages', accent) + `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(', ')}</div>`;
       },
       awards: () => this.genericList('Awards', r.awards, enabled.awards, accent, a => `<strong>${Utils.escapeHtml(a.name || '')}</strong>${a.description ? ' — ' + Utils.escapeHtml(a.description) : ''}`),
       volunteer: () => this.genericList('Volunteer Experience', r.volunteer, enabled.volunteer, accent, v => `<strong>${Utils.escapeHtml(v.role || '')}</strong> at ${Utils.escapeHtml(v.organization || '')}`),
@@ -325,7 +328,7 @@ const Preview = {
       }
       if (key === 'languages' && enabled.languages && (r.languages||[]).length) {
         html += this.sectionTitle('Languages', accent);
-        html += `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(' · ')}</div>`;
+        html += `<div>${r.languages.map(l => `${Utils.escapeHtml(l.name)} (${Utils.escapeHtml(l.level || '')})`).join(', ')}</div>`;
       }
       if (key === 'awards' && enabled.awards && (r.awards||[]).length) {
         html += this.genericList('Awards', r.awards, true, accent, a => Utils.escapeHtml(a.name || ''));
