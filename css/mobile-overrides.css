@@ -1,0 +1,190 @@
+/* ============================================================
+   MOBILE ONLY — shrink form buttons, radios, Additional Sections
+   Desktop sizes are unchanged. Linked after builder.css
+   ============================================================ */
+
+@media (max-width: 900px) {
+  /* Exclude checkboxes/radios from large input min-height */
+  .editor-panel input:not([type="checkbox"]):not([type="radio"]),
+  .editor-panel select,
+  .editor-panel textarea {
+    min-height: 40px;
+    font-size: 16px;
+    padding: 0.45rem 0.6rem;
+  }
+  .editor-panel input[type="checkbox"],
+  .editor-panel input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    padding: 0 !important;
+    margin: 0;
+    border: 2px solid var(--border-strong, #94a3b8);
+    background: var(--bg-secondary, #fff);
+    flex-shrink: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .editor-panel input[type="radio"] { border-radius: 50%; }
+  .editor-panel input[type="checkbox"] { border-radius: 4px; }
+  .editor-panel input[type="radio"]:checked {
+    border-color: var(--primary);
+    box-shadow: inset 0 0 0 3px var(--primary);
+    background: var(--bg-secondary, #fff);
+  }
+  .editor-panel input[type="checkbox"]:checked {
+    border-color: var(--primary);
+    background-color: var(--primary);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.2l3 3.1 6-6.2' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 10px 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Add buttons */
+  .editor-panel .btn-add {
+    min-height: 34px !important;
+    padding: 0.35rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    margin-top: 0.35rem;
+  }
+
+  /* Radio-style option chips */
+  .editor-panel .option-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.28rem !important;
+    min-height: 28px !important;
+    height: auto !important;
+    padding: 0.15rem 0.5rem 0.15rem 0.35rem !important;
+    font-size: 0.68rem !important;
+    border-radius: 999px;
+  }
+  .editor-panel .option-btn::before {
+    content: '';
+    width: 11px !important;
+    height: 11px !important;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong, #cbd5e1);
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+  .editor-panel .option-btn.active::before {
+    border-color: var(--primary);
+    background: var(--primary);
+    box-shadow: inset 0 0 0 2px var(--bg-secondary, #fff);
+  }
+  .editor-panel .option-btn[data-photo-shape="square"]::before {
+    border-radius: 3px;
+  }
+  .editor-panel .font-options,
+  .editor-panel .size-options,
+  .editor-panel .spacing-options {
+    gap: 0.3rem !important;
+  }
+
+  /* Skills toggle */
+  .editor-panel .skills-display-toggle button {
+    min-height: 30px !important;
+    padding: 0.2rem 0.45rem !important;
+    font-size: 0.68rem !important;
+  }
+
+  /* Additional Sections */
+  .editor-panel .checkbox-label {
+    font-size: 0.75rem !important;
+    gap: 0.35rem !important;
+    margin-top: 0.4rem !important;
+    margin-bottom: 0.25rem !important;
+    min-height: auto !important;
+    padding: 0.15rem 0 !important;
+    display: inline-flex;
+    align-items: center;
+  }
+  .editor-panel .extra-section-panel {
+    margin: 0.25rem 0 0.5rem;
+  }
+  .editor-panel .extra-section-panel .btn-add {
+    min-height: 32px !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* Generic editor buttons */
+  .editor-panel .btn:not(.btn-icon) {
+    min-height: 34px !important;
+    font-size: 0.75rem !important;
+    padding: 0.3rem 0.55rem !important;
+  }
+  .editor-panel .btn-sm {
+    min-height: 30px !important;
+    font-size: 0.7rem !important;
+  }
+  .editor-panel .btn-icon {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+  }
+  .editor-panel .color-swatch {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  /* Compact sections */
+  .editor-panel .editor-section {
+    margin-bottom: 0.5rem;
+  }
+  .editor-panel .editor-section-header {
+    padding: 0.6rem 0.75rem;
+    min-height: 40px;
+  }
+  .editor-panel .editor-section-body {
+    padding: 0.5rem 0.65rem 0.65rem;
+  }
+  .editor-panel .entry-card {
+    padding: 0.55rem 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .editor-panel .form-group {
+    margin-bottom: 0.5rem;
+  }
+  .editor-panel .score-widget {
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .editor-panel .score-checklist {
+    font-size: 0.7rem;
+    max-height: 4.5rem;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .editor-panel .btn-add {
+    min-height: 32px !important;
+    font-size: 0.72rem !important;
+  }
+  .editor-panel .option-btn {
+    min-height: 26px !important;
+    font-size: 0.65rem !important;
+  }
+  .editor-panel .option-btn::before {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  .editor-panel input[type="checkbox"],
+  .editor-panel input[type="radio"] {
+    width: 13px !important;
+    height: 13px !important;
+    min-width: 13px !important;
+    min-height: 13px !important;
+  }
+  .editor-panel .checkbox-label {
+    font-size: 0.72rem !important;
+  }
+}
