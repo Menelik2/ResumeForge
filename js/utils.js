@@ -89,12 +89,10 @@ const Utils = {
   },
 
   enableDragSort(container, itemSelector, onReorder) {
-    // Avoid stacking listeners when lists re-render
     if (container.dataset.dragSortBound === '1') return;
     container.dataset.dragSortBound = '1';
 
     container.addEventListener('dragstart', (e) => {
-      // Don't start drag from form controls (breaks typing on mobile)
       if (e.target.closest('input, textarea, select, button, a, label')) {
         e.preventDefault();
         return;
