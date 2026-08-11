@@ -10,15 +10,11 @@ const Builder = {
     Utils.initTheme();
     const params = new URLSearchParams(window.location.search);
     let id = params.get('id') || Storage.getCurrentId();
-
-    if (id) {
-      this.resume = Storage.getResume(id);
-    }
+    if (id) this.resume = Storage.getResume(id);
     if (!this.resume) {
       this.resume = Storage.createEmptyResume();
       Storage.saveResume(this.resume);
     }
-
     ['awards','volunteer','publications','interests','references','achievements'].forEach(k => {
       if (!Array.isArray(this.resume[k])) this.resume[k] = [];
     });
@@ -27,7 +23,6 @@ const Builder = {
     if (this.resume.customization.skillsDisplay === 'bars' || !this.resume.customization.skillsDisplay) {
       this.resume.customization.skillsDisplay = 'text';
     }
-
     this.bindUI();
     this.populateForm();
     this.renderPreview();
@@ -35,10 +30,7 @@ const Builder = {
     Utils.initAccordions();
     this.initMobileNav();
     this.initKeyboard();
-
-    document.querySelectorAll('.editor-section').forEach((s, i) => {
-      if (i < 2) s.classList.add('open');
-    });
+    document.querySelectorAll('.editor-section').forEach((s, i) => { if (i < 2) s.classList.add('open'); });
   },
 
   bindUI() {
@@ -50,7 +42,6 @@ const Builder = {
         this.scheduleSave();
       }, 400));
     }
-
     const personalMap = {
       'full-name': 'fullName', 'job-title': 'title', 'email': 'email', 'phone': 'phone',
       'location': 'location', 'website': 'website', 'linkedin': 'linkedin', 'github': 'github', 'summary': 'summary'
@@ -69,7 +60,6 @@ const Builder = {
         }
       }, 200));
     });
-
     const photoInput = document.getElementById('photo-input');
     if (photoInput) {
       photoInput.addEventListener('change', async (e) => {
@@ -99,7 +89,6 @@ const Builder = {
         this.scheduleSave();
       });
     });
-
     document.getElementById('add-experience')?.addEventListener('click', () => this.addEntry('experience'));
     document.getElementById('add-education')?.addEventListener('click', () => this.addEntry('education'));
     document.getElementById('add-skill')?.addEventListener('click', () => this.addEntry('skills'));
@@ -112,7 +101,6 @@ const Builder = {
     document.getElementById('add-interest')?.addEventListener('click', () => this.addEntry('interests'));
     document.getElementById('add-reference')?.addEventListener('click', () => this.addEntry('references'));
     document.getElementById('add-achievement')?.addEventListener('click', () => this.addEntry('achievements'));
-
     document.querySelectorAll('[data-skills-display]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.resume.customization.skillsDisplay = btn.dataset.skillsDisplay;
@@ -121,7 +109,6 @@ const Builder = {
         this.scheduleSave();
       });
     });
-
     document.querySelectorAll('[data-accent]').forEach(swatch => {
       swatch.addEventListener('click', () => {
         this.resume.customization.accentColor = swatch.dataset.accent;
@@ -154,11 +141,9 @@ const Builder = {
         this.scheduleSave();
       });
     });
-
     document.getElementById('change-template')?.addEventListener('click', () => {
       window.location.href = 'templates.html?from=builder&id=' + this.resume.id;
     });
-
     document.getElementById('btn-save')?.addEventListener('click', () => this.save(true));
     document.getElementById('btn-download-pdf')?.addEventListener('click', () => PDF.download());
     document.getElementById('btn-print')?.addEventListener('click', () => PDF.print());
@@ -206,9 +191,7 @@ const Builder = {
         Utils.toast('Resume cleared', 'info');
       }
     });
-
     document.getElementById('theme-toggle')?.addEventListener('click', () => Utils.toggleTheme());
-
     document.querySelectorAll('[data-toggle-section]').forEach(cb => {
       cb.addEventListener('change', () => {
         const key = cb.dataset.toggleSection;
@@ -219,10 +202,7 @@ const Builder = {
         const extraTypes = ['awards', 'volunteer', 'publications', 'interests', 'references', 'achievements'];
         if (cb.checked && extraTypes.includes(key)) {
           if (!Array.isArray(this.resume[key])) this.resume[key] = [];
-          if (this.resume[key].length === 0) {
-            this.addEntry(key);
-            return;
-          }
+          if (this.resume[key].length === 0) { this.addEntry(key); return; }
           this.renderEntryList(key);
         }
         this.renderPreview();
@@ -247,9 +227,7 @@ const Builder = {
     const skillsDisplay = (c.skillsDisplay === 'bars' || !c.skillsDisplay) ? 'text' : c.skillsDisplay;
     document.querySelectorAll('[data-skills-display]').forEach(b => b.classList.toggle('active', b.dataset.skillsDisplay === skillsDisplay));
     document.querySelectorAll('[data-photo-shape]').forEach(b => b.classList.toggle('active', b.dataset.photoShape === p.photoShape));
-
     ['experience','education','skills','projects','certifications','languages','awards','volunteer','publications','interests','references','achievements'].forEach(t => this.renderEntryList(t));
-
     Object.entries(this.resume.enabledSections || {}).forEach(([key, val]) => {
       const cb = document.querySelector(`[data-toggle-section="${key}"]`);
       if (cb) cb.checked = !!val;
@@ -300,30 +278,27 @@ const Builder = {
       if (map[type]) card.innerHTML = map[type]();
       container.appendChild(card);
     });
-
     container.querySelectorAll('[data-field]').forEach(input => {
-      input.addEventListener('input', Utils.debounce(() => {
-        const id = input.closest('.entry-card').dataset.id;
+      const apply = () => {
+        const card = input.closest('.entry-card');
+        if (!card) return;
+        const id = card.dataset.id;
         const field = input.dataset.field;
         const item = (this.resume[type] || []).find(i => i.id === id);
         if (!item) return;
-        if (input.type === 'checkbox') item[field] = input.checked;
-        else item[field] = input.value;
+        if (input.type === 'checkbox') {
+          item[field] = input.checked;
+          if (field === 'current') {
+            const endInput = card.querySelector('[data-field="endDate"]');
+            if (endInput) { endInput.disabled = !!input.checked; if (input.checked) endInput.value = ''; }
+          }
+        } else item[field] = input.value;
         this.renderPreview();
         this.updateScore();
         this.scheduleSave();
-      }, 200));
-      if (input.tagName === 'SELECT') {
-        input.addEventListener('change', () => {
-          const id = input.closest('.entry-card').dataset.id;
-          const field = input.dataset.field;
-          const item = (this.resume[type] || []).find(i => i.id === id);
-          if (!item) return;
-          item[field] = input.value;
-          this.renderPreview();
-          this.scheduleSave();
-        });
-      }
+      };
+      input.addEventListener('input', Utils.debounce(apply, 150));
+      input.addEventListener('change', apply);
     });
     container.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -366,30 +341,14 @@ const Builder = {
 
   educationCardHTML(item) {
     return `<div class="entry-header"><div class="drag-handle">⠿</div><div style="flex:1;"><div class="entry-title">${Utils.escapeHtml(item.degree) || 'New Education'}</div><div class="entry-subtitle">${Utils.escapeHtml(item.institution) || ''}</div></div><div class="entry-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="up">↑</button><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="down">↓</button><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div></div>
-      <div class="form-row"><div class="form-group"><label>Degree</label><input data-field="degree" value="${Utils.escapeHtml(item.degree || '')}" /></div><div class="form-group"><label>Institution</label><input data-field="institution" value="${Utils.escapeHtml(item.institution || '')}" /></div></div>
-      <div class="form-row"><div class="form-group"><label>Location</label><input data-field="location" value="${Utils.escapeHtml(item.location || '')}" /></div><div class="form-group"><label>Start</label><input type="month" data-field="startDate" value="${item.startDate || ''}" /></div></div>
-      <div class="form-group"><label>End</label><input type="month" data-field="endDate" value="${item.endDate || ''}" /></div>
+      <div class="form-row"><div class="form-group"><label>Degree</label><input data-field="degree" value="${Utils.escapeHtml(item.degree || '')}" placeholder="e.g. B.Sc. Computer Science" /></div><div class="form-group"><label>Institution</label><input data-field="institution" value="${Utils.escapeHtml(item.institution || '')}" placeholder="University name" /></div></div>
+      <div class="form-row"><div class="form-group"><label>Location</label><input data-field="location" value="${Utils.escapeHtml(item.location || '')}" /></div><div class="form-group"><label>GPA</label><input data-field="gpa" value="${Utils.escapeHtml(item.gpa || '')}" placeholder="e.g. 3.8 / 4.0" inputmode="decimal" /></div></div>
+      <div class="form-row"><div class="form-group"><label>Start</label><input type="month" data-field="startDate" value="${item.startDate || ''}" /></div><div class="form-group"><label>End</label><input type="month" data-field="endDate" value="${item.endDate || ''}" /></div></div>
       <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${Utils.escapeHtml(item.description || '')}</textarea></div>`;
   },
 
   skillCardHTML(item) {
-    return `
-      <div class="skill-card-inner">
-        <div class="skill-card-top">
-          <span class="drag-handle" title="Drag to reorder" aria-hidden="true">⠿</span>
-          <button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete" aria-label="Remove skill">✕</button>
-        </div>
-        <div class="form-group skill-name-group">
-          <label>Skill name</label>
-          <input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="Type skill name…" autocomplete="off" />
-        </div>
-        <div class="form-group skill-level-group">
-          <label>Level</label>
-          <select data-field="level" class="skill-level-select">
-            ${['Beginner','Intermediate','Advanced','Expert'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}
-          </select>
-        </div>
-      </div>`;
+    return `<div class="skill-card-inner"><div class="skill-card-top"><span class="drag-handle" title="Drag to reorder">⠿</span><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete" aria-label="Remove skill">✕</button></div><div class="form-group skill-name-group"><label>Skill name</label><input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="Type skill name…" autocomplete="off" /></div><div class="form-group skill-level-group"><label>Level</label><select data-field="level" class="skill-level-select">${['Beginner','Intermediate','Advanced','Expert'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div></div>`;
   },
 
   projectCardHTML(item) {
@@ -405,15 +364,7 @@ const Builder = {
   },
 
   langCardHTML(item) {
-    return `
-      <div class="skill-card-inner">
-        <div class="skill-card-top">
-          <span class="drag-handle">⠿</span>
-          <button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button>
-        </div>
-        <div class="form-group"><label>Language</label><input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="e.g. English" /></div>
-        <div class="form-group"><label>Level</label><select data-field="level">${['Native','Fluent','Advanced','Intermediate','Basic'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
-      </div>`;
+    return `<div class="skill-card-inner"><div class="skill-card-top"><span class="drag-handle">⠿</span><button type="button" class="btn btn-ghost btn-icon btn-sm" data-action="delete">✕</button></div><div class="form-group"><label>Language</label><input data-field="name" type="text" value="${Utils.escapeHtml(item.name || '')}" placeholder="e.g. English" /></div><div class="form-group"><label>Level</label><select data-field="level">${['Native','Fluent','Advanced','Intermediate','Basic'].map(l => `<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div></div>`;
   },
 
   awardCardHTML(item) {
@@ -451,7 +402,7 @@ const Builder = {
   addEntry(type) {
     const defaults = {
       experience: { id: Utils.uid(), jobTitle: '', company: '', location: '', startDate: '', endDate: '', current: false, description: '' },
-      education: { id: Utils.uid(), degree: '', institution: '', location: '', startDate: '', endDate: '', description: '' },
+      education: { id: Utils.uid(), degree: '', institution: '', location: '', gpa: '', startDate: '', endDate: '', description: '' },
       skills: { id: Utils.uid(), name: '', level: 'Intermediate' },
       projects: { id: Utils.uid(), name: '', description: '', technologies: '', url: '', github: '' },
       certifications: { id: Utils.uid(), name: '', organization: '', issueDate: '', credentialId: '', url: '' },
