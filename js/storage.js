@@ -113,7 +113,7 @@ const Storage = {
         degree: 'B.Sc. Computer Science',
         institution: 'Bahir Dar University',
         location: 'Bahir Dar, Ethiopia',
-        gpa: '3.8 / 4.0',
+        gpa: '3.8',
         startDate: '2016-09',
         endDate: '2020-06',
         description: 'Graduated with distinction. Focus on software engineering and databases.'
