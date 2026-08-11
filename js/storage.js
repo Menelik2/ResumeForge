@@ -1,5 +1,5 @@
 /* ============================================
-   ResumeForge — Local Storage Management
+   Yeni Pro CV — Local Storage Management
    ============================================ */
 
 const Storage = {
@@ -40,12 +40,12 @@ const Storage = {
       references: [],
       achievements: [],
       customization: {
-        accentColor: '#2563eb',
+        accentColor: '#0d9488',
         font: 'Inter',
         fontSize: 'medium',
         spacing: 'normal',
         layout: 'one-column',
-        skillsDisplay: 'bars'
+        skillsDisplay: 'text'
       },
       sectionOrder: [
         'summary', 'experience', 'education', 'skills',
