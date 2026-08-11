@@ -260,7 +260,7 @@
   .resume-paper { transform: scale(0.7); margin-bottom: -30%; }
 }
 
-/* Mobile bottom nav */
+/* Mobile bottom nav — real icon size 20px */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -270,7 +270,7 @@
   background: var(--bg-secondary);
   border-top: 1px solid var(--border);
   z-index: 80;
-  padding: 0.25rem 0 calc(0.25rem + env(safe-area-inset-bottom, 0px));
+  padding: 0.3rem 0 calc(0.3rem + env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
 }
 .mobile-nav-inner {
@@ -284,40 +284,45 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 6px 10px;
-  font-size: 0.65rem;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 8px;
+  font-size: 0.625rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   color: var(--text-muted);
   border: none;
   background: transparent;
   border-radius: var(--radius-sm);
-  min-width: 56px;
-  min-height: 44px;
-  justify-content: center;
+  min-width: 64px;
+  min-height: 48px;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   cursor: pointer;
 }
 .mobile-nav-btn span {
-  font-size: 0.65rem;
+  font-size: 0.625rem;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
 }
 .mobile-nav-btn.active {
   color: var(--primary);
   background: var(--primary-light);
 }
-/* Fixed real icon size */
+/* Fixed real icon size — never scale with font */
 .mobile-nav-btn svg,
 .mobile-nav-btn .nav-icon {
   width: 20px !important;
   height: 20px !important;
-  min-width: 20px;
-  min-height: 20px;
-  max-width: 20px;
-  max-height: 20px;
-  flex-shrink: 0;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  flex: 0 0 20px !important;
   display: block;
+  overflow: visible;
+  pointer-events: none;
+  font-size: 0;
 }
 
 @media (max-width: 900px) {
@@ -360,17 +365,21 @@
   .builder-header-right #change-template { display: none; }
   .resume-paper { transform: scale(0.42); margin-bottom: -58%; }
   .mobile-nav-btn {
-    min-width: 48px;
+    min-width: 56px;
+    min-height: 48px;
     padding: 4px 6px;
     font-size: 0.6rem;
+    gap: 2px;
   }
+  .mobile-nav-btn span { font-size: 0.6rem; }
   .mobile-nav-btn svg,
   .mobile-nav-btn .nav-icon {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px;
-    min-height: 18px;
-    max-width: 18px;
-    max-height: 18px;
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    flex: 0 0 20px !important;
   }
 }
