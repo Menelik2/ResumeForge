@@ -83,9 +83,39 @@ const TemplatesPage = {
     });
   },
 
+  /** True if resume has almost no content — safe to fill with sample */
+  isResumeEmpty(resume) {
+    if (!resume || !resume.personal) return true;
+    const p = resume.personal;
+    const hasName = !!(p.fullName && p.fullName.trim());
+    const hasExp = (resume.experience || []).length > 0;
+    const hasEdu = (resume.education || []).length > 0;
+    const hasSkills = (resume.skills || []).length > 0;
+    return !hasName && !hasExp && !hasEdu && !hasSkills;
+  },
+
+  applyTemplate(templateId) {
+    let resume;
+    if (this.resumeId) resume = Storage.getResume(this.resumeId);
+
+    // Empty resume → fill with full sample so user sees complete template style
+    if (!resume || this.isResumeEmpty(resume)) {
+      const sample = Storage.getSampleResume();
+      if (resume && resume.id) {
+        sample.id = resume.id;
+        sample.title = resume.title || sample.title;
+      }
+      resume = sample;
+    }
+
+    resume.template = templateId;
+    Storage.saveResume(resume);
+    Utils.toast('Template applied with sample data — edit anytime', 'success');
+    setTimeout(() => { window.location.href = 'builder.html?id=' + resume.id; }, 400);
+  },
+
   miniPreview(id) {
     const previews = {
-      /* ---- Base 10 ---- */
       modern: `
         <div style="padding:10px;height:100%;box-sizing:border-box;background:#fff">
           <div style="display:flex;justify-content:space-between;align-items:flex-start">
@@ -265,7 +295,6 @@ const TemplatesPage = {
           <div style="height:3px;background:#e2e8f0;border-radius:1px;width:70%"></div>
         </div>`,
 
-      /* ---- Specialty 6 + Classic ---- */
       hr: `
         <div style="height:100%;box-sizing:border-box;background:#f7f2ec;padding:6px;font-family:Georgia,serif">
           <div style="background:#3d1212;color:#fff;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -490,16 +519,6 @@ const TemplatesPage = {
         </div>`
     };
     return previews[id] || previews.modern;
-  },
-
-  applyTemplate(templateId) {
-    let resume;
-    if (this.resumeId) resume = Storage.getResume(this.resumeId);
-    if (!resume) resume = Storage.createEmptyResume();
-    resume.template = templateId;
-    Storage.saveResume(resume);
-    Utils.toast('Template applied: ' + (TEMPLATES.find(t => t.id === templateId)?.name || templateId), 'success');
-    setTimeout(() => { window.location.href = 'builder.html?id=' + resume.id; }, 400);
   }
 };
 
