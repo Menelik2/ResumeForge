@@ -153,6 +153,15 @@ const Storage = {
       { id: Utils.uid(), name: 'German', level: 'Intermediate' }
     ];
     r.enabledSections.awards = false;
+    r.enabledSections.projects = true;
+    r.enabledSections.certifications = true;
+    r.enabledSections.languages = true;
+    r.interests = [
+      { id: Utils.uid(), name: 'Open Source' },
+      { id: Utils.uid(), name: 'Hiking' },
+      { id: Utils.uid(), name: 'Photography' }
+    ];
+    r.enabledSections.interests = true;
     return r;
   },
 
