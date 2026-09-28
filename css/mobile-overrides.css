@@ -1,5 +1,5 @@
 /* ============================================================
-   MOBILE ONLY — shrink form buttons, radios, Additional Sections
+   MOBILE ONLY — form controls + bottom nav icons
    Desktop sizes are unchanged
    ============================================================ */
 @media (max-width: 900px) {
@@ -106,6 +106,104 @@
     min-height: 40px;
     font-size: 16px;
   }
+
+  /* ===== Bottom nav: clear icons + touch targets ===== */
+  .mobile-nav {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-secondary, #fff);
+    border-top: 1px solid var(--border, #e2e8f0);
+    padding: 4px 0 calc(4px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+  }
+  .mobile-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 4px;
+  }
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 56px;
+    min-width: 0;
+    padding: 8px 4px;
+    margin: 0 2px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+  .mobile-nav-btn span {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .mobile-nav-btn svg.nav-icon,
+  .mobile-nav-btn .nav-icon,
+  .mobile-nav-btn svg {
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    max-width: 22px !important;
+    max-height: 22px !important;
+    flex: 0 0 22px !important;
+    stroke: currentColor !important;
+    stroke-width: 2 !important;
+    fill: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: inherit;
+    pointer-events: none;
+  }
+  .mobile-nav-btn.active {
+    color: #2563eb !important;
+    background: #dbeafe !important;
+  }
+  [data-theme="dark"] .mobile-nav-btn {
+    color: #94a3b8;
+  }
+  [data-theme="dark"] .mobile-nav-btn.active {
+    color: #60a5fa !important;
+    background: #1e3a5f !important;
+  }
+
+  /* Header: prevent title crushing PDF button */
+  .builder-header-left .resume-title-input {
+    max-width: 100px !important;
+    font-size: 0.85rem !important;
+  }
+  .builder-header-right #btn-save,
+  .builder-header-right #btn-print,
+  .builder-header-right #change-template {
+    display: none !important;
+  }
+  .builder-header-right #btn-download-pdf {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.8rem !important;
+    min-height: 36px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -131,5 +229,28 @@
     height: 13px !important;
     min-width: 13px !important;
     min-height: 13px !important;
+  }
+
+  .mobile-nav-btn {
+    min-height: 54px;
+    gap: 3px;
+    padding: 6px 2px;
+  }
+  .mobile-nav-btn span {
+    font-size: 0.6rem;
+  }
+  .mobile-nav-btn svg.nav-icon,
+  .mobile-nav-btn .nav-icon,
+  .mobile-nav-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    flex: 0 0 20px !important;
+  }
+  .builder-header-left .resume-title-input {
+    max-width: 72px !important;
   }
 }
