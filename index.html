@@ -91,6 +91,36 @@
       </div>
     </section>
 
+    <div class="feature-strip" aria-label="Key benefits">
+      <div class="feature-item">
+        <div class="fi-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <strong>100% Private</strong>
+          <span>Data stays in your browser</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <div>
+          <strong>17 Templates</strong>
+          <span>Professional &amp; creative styles</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div>
+          <strong>PDF Export</strong>
+          <span>Print-ready in one click</span>
+        </div>
+      </div>
+    </div>
+
     <section class="container">
       <div class="section-title">
         <h2>My Resumes</h2>
@@ -101,10 +131,10 @@
       </div>
 
       <div id="empty-state" class="empty-state hidden">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         <h3>No resumes yet</h3>
-        <p>Create your first professional resume or try the sample data.</p>
-        <button id="btn-create-empty" class="btn btn-primary" onclick="document.getElementById('btn-create').click()">+ Create New Resume</button>
+        <p>Create your first professional resume or try the sample data to explore templates.</p>
+        <button id="btn-create-empty" class="btn btn-primary" type="button" onclick="document.getElementById('btn-create').click()">+ Create New Resume</button>
       </div>
 
       <div id="resume-list" class="resume-grid"></div>
@@ -113,8 +143,8 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>Yeni Pro CV — Privacy-first resume builder. Built with pure HTML, CSS & JavaScript.</p>
-      <p style="margin-top:0.5rem;font-size:0.8rem;">Your data is stored locally in your browser and is never uploaded to a server.</p>
+      <p>Yeni Pro CV — Privacy-first resume builder. Built with pure HTML, CSS &amp; JavaScript.</p>
+      <p>Your data is stored locally in your browser and is never uploaded to a server.</p>
     </div>
   </footer>
 
