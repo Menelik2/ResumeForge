@@ -7,7 +7,7 @@ const Preview = {
     if (!container) return;
     const t = resume.template || 'modern';
     const c = resume.customization || {};
-    const accent = c.accentColor || '#0d9488';
+    const accent = c.accentColor || '#2563eb';
     const font = c.font || 'Inter';
     const fontSizeMap = { small: '9.5pt', medium: '10.5pt', large: '11.5pt' };
     const spacingMap = { compact: '1.25', normal: '1.45', comfortable: '1.65' };
@@ -109,7 +109,6 @@ const Preview = {
     return items.map(renderer).join('');
   },
 
-  /* Classic Professional — placeholder; real design in preview-templates-extra.js */
   tplClassic(r, accent) {
     return this.tplModern(r, accent);
   },

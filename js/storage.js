@@ -40,7 +40,7 @@ const Storage = {
       references: [],
       achievements: [],
       customization: {
-        accentColor: '#0d9488',
+        accentColor: '#2563eb',
         font: 'Inter',
         fontSize: 'medium',
         spacing: 'normal',
@@ -179,7 +179,13 @@ const Storage = {
   },
 
   getResume(id) {
-    return this.getAllResumes().find(r => r.id === id) || null;
+    const r = this.getAllResumes().find(r => r.id === id) || null;
+    // Migrate legacy teal brand accent → professional blue
+    if (r && r.customization && r.customization.accentColor === '#0d9488') {
+      r.customization.accentColor = '#2563eb';
+      this.saveResume(r);
+    }
+    return r;
   },
 
   saveResume(resume) {
